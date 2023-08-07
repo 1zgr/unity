@@ -1,0 +1,12 @@
+首先从unity官网上下载unityhub（管理unity项目的一个工具） 注册账号 然后下载想要的unity版本
+安装SDK、JDK、NDK
+下载不同平台的对应开发环境 一般安卓会用到的比较多
+
+
+打开unity后工作区分为
+1.Scene视图
+2.Game试图
+3.Hierarchy面板
+4.Asset
+5.Inspector
+6.Console
