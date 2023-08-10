@@ -1,0 +1,63 @@
+九大生命周期函数
+Awake（）	对象或脚本创建时执行 注意不管是否在Inspctor窗口上是否打勾 此函数都会被执行
+Start（）	用于对象的初始化 当在此函数初始化报空时 可在Awake函数中初始化
+OnEnable（）	当对象或脚本激活时调用
+FixedUpdate（）	每隔固定时间间隔内调用 正常是0.02 可在unity编辑器中设置	一般进行一些物理方面相关的操作
+Update（）	每帧都会执行此方法 不要在此函数中进行一些消耗性能的操作 涉及到相关优化
+LateUpdate（）	Update（）函数执行后执行此函数 一般进行一些摄像机或物体追踪相关的操作
+OnGuI（）		在渲染和处理GUI时间时调用     一般用于NGUI
+OnDisable（）	当对象或脚本取消激活的时候调用
+OnDestory（）	当对象或脚本销毁的时候调用
+
+
+几种特殊的类
+1.Time
+Time.time:从游戏开始到游戏暂停或结束的时间	会随着游戏的暂停停止计算
+Time.deltaTime:从上一帧到当前的时间 以秒为单位    一般用于确保在不同的帧率下移动速度一致
+Time.timeScale:时间缩放 默认为1 若设置大于1 表示时间加快
+若设置小于1 表示时间减慢 可以用来加速和减速游戏
+=0则停止	=1则继续	一般用于游戏暂停和继续游戏
+
+2.Input
+Input.GetMouseButton(0) 鼠标左键一直按下为true
+0：左键		1：右键		2：中键
+Input.GetMouseButtonDown(0)	鼠标左键按下时为true
+void OnMouseEnter（）表示鼠标移动到该位置时就进入方法
+void OnMouseExit（）表示鼠标移开该位置就变回原样
+float h = Input.GetAxis(“Horizontal”);	自定义水平键
+float v = Input.GetAxis(“Vertical”);	自定义垂直键
+Input.GetKeyDown(KeyCode.A)
+Input.GetKeyDown(KeyCode.LeftArrow)
+Input.GetDown(KeyCode.Space)
+3.GameObject
+GameObject和gameobject的区别
+GameObject是游戏对象类的基类（所有游戏对象）
+gameobject是脚本挂载的对象（脚本组件所在的游戏对象）
+4.Transform
+世界坐标：以场景的原点为原点
+本地坐标：以父物体的位置为原点
+transform为一个类 用来描述物体的位置、旋转、大小等信息
+//四元数：Quaternion  欧拉角：Euler
+//表示在世界坐标绕y轴旋转45°
+transform.rotation = Quaternion.Euler(0, 45, 0);
+//表示在本地坐标绕y轴旋转45°
+transform.localRotation = Quaternion.Euler(0, 45, 0);
+//表示一个游戏对象绕另一个游戏对象旋转(位置，方向，速度)
+transform.RotateAround(sphere.position,Vector3.up,1);
+transform.rotation和transform.Rotate的区别：
+Rotate()方法是：旋转多少度。在原有的基础上累加，即旋转了多少角度
+rotation属性是：旋转到某个角度，就是是在update中每帧都执行。但每次旋转到的角度都是45，所以是旋转到45度。
+比如你只想让他旋转到多少, 用rotation;
+假如让它一直转,可以用Rotaterotation直接改变了数值, 以达到旋转效果
+//以x轴方向放大2倍
+transform.localScale = new Vector3(2,1,1);
+5.Mathf
+数学工具类
+Mathf.Abs:返回一个数的绝对值
+Mathf.Clamp:将一个值限制在一个范围内
+Mathf.Lerp:在两个值之间进行线性插值
+Mathf.Max:返回一组数中的最大值
+Mathf.Min:返回一组数中的最小值
+Mathf.Pow:计算一个数的幂次方
+Mathf.Round:将一个数四舍五入到最接近的整数
+
