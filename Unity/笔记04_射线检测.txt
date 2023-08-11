@@ -1,0 +1,11 @@
+射线检测：从3D世界中 任意一点发射出一条射线 在这个过程中与物体发生碰撞时将停止发射
+注意是去检测添加了Collider的组件对象
+应用：鼠标拣选 子弹发射 
+
+
+Physics.Raycast(Vector3 origin,Vector3 direction,RaycastHit hitInfo,float distance,int LayerMask)
+第一个参数和第二个参数通常用ray来代替
+最后两个参数为可选参数	返回值为bool类型
+
+Ray myray=new Ray(Vector3 origin,Vector3 direction)
+还可以用Draw.Line在Scene窗口把射线绘制出来 并且可以给射线一个颜色

@@ -1,0 +1,163 @@
+无父子关系的查找	GameObject.Find		无法查找隐藏对象
+有父子关系的查找	transform.Find		可以查找隐藏对象
+GameObject.FindGameObjectwithTag()		标签查找
+
+
+脚本的类名要与文件名保持一致
+凡是要在unity当中挂载在游戏对象身上的脚本必须要继承Monobehavior
+凡是继承了Monobehavior的类不能用new创建对象
+
+
+预制体（Prefab）的作用：将游戏物体作为预制体可以方便游戏实例化 一般用于游戏中大量使用的游戏对象 比如：子弹、敌人、一些粒子特效等
+便于复用 和团队合作
+
+Canvas（画布）
+所有的UI组件都是基于画布之上的 画布相当与一个容器 和空的游戏物体作用一样 充当容器的作用
+Render Mode为UI的渲染模式	分为
+1.World Space模式 需要单独指定一个摄像机来进行UI的渲染	把UI当成物体处理
+2.Overlay模式	UI永远处于物体的前方
+3.Camera模式	UI元素将绘制在指定相机下 通常用于在3D场景中嵌入2D UI元素
+
+
+Canvas Scaler
+UI Scale Mode	UI大小模式
+1.Content Pixel Size
+2.Scale With Screen Size这个为最常用 经常与锚点和轴点一起相结合 进行屏幕适配
+需要自己手动输入分辨率 并且以宽还是高进行适配
+
+
+Graphic Raycaster
+这个组件用于UI元素是否被点击或触摸
+当鼠标点击或者是触摸屏幕时 这个组件会向场景中的ui元素发射一条射线来确定被点击或触摸的元素是哪一个
+Ignore Reversed Graphics是用于控制是否忽略逆向的图形
+假设相机和ui元素中间有物体 射线可能就会被这个物体所拦截
+可以通过Blocking Objects来进行选择Two D屏蔽2d物体对ui的拦截或者所有
+Blocking Mask也是同理
+
+Canvas Group
+Alpha:用于控制界面的透明度
+Interactable：表示交互性 取消勾选后 按钮不能被点击 会变成半透明状态
+Blocking Raycasts：用于拦截射线检测
+如果取消勾选的话 射线到达这一层级的UI的时候就不会往后传递了 被UI挡住的其它物体将收不到射线检测 
+
+Transform
+Position：位置
+Rotation：旋转
+Scale：缩放
+
+Box Collider（碰撞体）
+如果选择Mesh Collider的话 虽然比较切合物体的形状 但是比较耗费性能
+Edit Collider:可以在Scene试图编辑碰撞体的大小
+IsTrigger：是否为触发器
+Materical：材质
+Center：中心位置
+Size：碰撞体大小
+OnCollisionEnter()
+OnCollisionStay()
+OnCollisionExit()
+
+碰撞器和触发器的区别
+碰撞器是触发器的载体
+触发器是碰撞体的属性
+当两个运动的游戏物体 其中其中一方具有刚体 此时会发生碰撞检测
+当Is Trigger取消勾选时 会产生碰撞 会产生一些物体效果
+此时可以进行OnCollisionEnter()、OnCollisionStay()、OnCollisionExit()函数的使用
+当Is Trigger勾选时	会产生触发效果 
+此时可以进行OnTriggerEnter()、OnTriggerStay()、OnTriggerExit()函数的使用
+如果既要检测到物体的接触又不想让碰撞检测影响物体的移动
+或检测一个物体是否经过空间中的某个区域这是就可以用触发器
+
+
+Rigidbody（刚体）
+Mass：质量 数值越大 下降越快
+Drag：阻力 数值月越大 反向加速度越大
+Angular Drag：角阻力 数值越大 自身旋转的速度减慢的越快
+Use Gravity：是否使用重力
+Is Kenematic：是否受物理影响
+Interpolate：设置图像差值
+1. 默认为none 由于图形更新比物理更新要快 可能会导致物体跳跃式前进
+2. Interpolate模式 物体会根据上一帧物体的位置进行平滑运动
+3. Extrapolate模式 物体会根据下一帧物体的位置进行平滑运动
+Collision Detection 碰撞检测
+对于高速运动的物体来说 当Collision Detection为默认的Discrete时 
+有可能存在一种情况：前一帧时 物体在碰撞器的一边 
+下一帧时 物体也已经穿越了碰撞器达到了另一边 以致于检测不到碰撞 这时 我们就需要连续碰撞检测
+1.	Discrete：非连续型检测模式（默认）
+2.	Continuous：连续检测。
+更加精细的碰撞检测 但是很耗资源
+在这种状态下 当这个刚体与其他普通刚体碰撞时 
+仍将使Discrete的碰撞检测 但是与没有刚体的Mesh Collider碰撞时就会连续检测了
+3.	Continuous Dynamic：连续动态检测
+对没有刚体的Mesh Collider或是对处在Continuous或是Continuous Dynamic状态下的刚体使用连续碰撞检测
+对其他的刚体使用普通的Discrete检测。
+Continuous和Continuous Dynamic的区别在于对Continuous使用何种检测
+Continuous使用Discrete 而Continuous Dynamic使用Continuous 但它们对物理性能都有很大影响
+1.刚体和刚体之间的连续碰撞检测
+刚体的碰撞器必须是BoxCollider或SphereCollider或CapusleCollider.
+2.刚体和非刚体(静态碰撞器)之间的连续碰撞检测
+刚体的碰撞器必须是BoxCollider或SphereCollider或CapusleCollider 非刚体的碰撞器必须是Mesh
+Constraints：冻结 停止某个轴向感应物理引擎的效果
+1.Freeze Position:冻结x轴方向，y轴方向，z轴方向
+2.Freeze Rotation:冻结x轴旋转，y轴旋转，z轴旋转
+
+
+Camera（摄像机）
+主摄像机的标签默认为MainCamera
+Clear Flags:背景显示内容。
+1.SkyBox: 默认是天空盒子 这个在设置中是可以修改的 lighting/Scene/skybox
+2.Solid Color：纯色 选择此选项显示background颜色
+3.Depth Only：仅深度 用于游戏对象不希望被裁减的情况
+4.Don't Clear:不清除 不清除任何颜色或深度缓存 
+其结果是 每一帧渲染的结果叠加在下一帧之上 一般与自定义的shader使用
+Background:背景显示颜色 没有天空盒子将显示这个颜色
+Culling Mask:用于选择是否显示某些层 默认是Everything 可用于单独渲染UI
+Projection:摄像机的类型（投影方式）
+1.Perspective：透视投影 摄像机将用透视的方式来渲染游戏对象
+2.Orthographic：正交投影 摄像机将用无透视的方式来渲染游戏对象
+3.Size：大小 用于控制正交模式摄像机的视口大小
+Field Of View：视野范围 用于控制摄像机的视角宽度以及纵向的角度尺寸
+Clipping Planes:剪裁平面 摄像机的渲染范围 Near为最近的点 Far为最远的点
+Viewport Rect:视图矩形 用四个数值来控制摄像机的视图绘制在屏幕的位置和大小
+使用的是屏幕坐标系 数值在0~1之间 坐标系原点在左下角
+Depth:深度 用于控制摄像机的渲染顺序 较大值的摄像机将被渲染在较小值的摄像机之上
+Rendering Path:渲染路径 用于指定摄像机的渲染方法。
+1. Use Graphics Settings:选择图形设置中的方法
+2. Forward:快速渲染 传统的渲染路径 它支持每个像素的光照及平行光（directional light）的实时阴影
+3. Deferred:延迟渲染 会准确如实地渲染光照和阴影
+如果有许多实时光照 最适合它 需要一定程度的硬件支持 不支持移动设备
+4. Legacy Vertex Lit:顶点光照 摄像机将对所有的游戏对象座位顶点光照对象来渲染
+5. Legacy Deferred(light prepass):具有最低照明保真度和不支持实时阴影的渲染路径 它是前向渲染路径的子集。
+在使用正投影时不支持延迟渲染 如果相机的投影模式被设置为正交 则这些值被重写 并且相机将总是使用快速渲染。
+Target Texture:目标纹理 用于将摄像机视图输出并渲染到屏幕 可以用于制作人物头像框
+Occlusion Culling:遮挡剔除	用于优化
+HDR:高动态光照渲染 用于启用摄像机的高动态范围渲染功能
+因为人眼对的范围的光照强度更为敏感 所有用高动态范围渲染能让场景变得更为真实 光照的变化不会显得太突兀
+Target Display:目标显示 可用于分屏
+
+四种光源
+1.平行光：Directional Light	用于模拟太阳 模拟自然光 方向光任何地方都能照射到 就和太阳一样 但是要注意照射方向
+2.点光源：Point Light	模拟电灯泡的照射效果
+3.聚光灯：Spot Light	模拟聚光灯的照射效果	手电筒
+4.区域光：Area Light	在实时光照模式下是无效的 仅在烘焙光照模式下有用
+
+
+AudioSource（音频组件）
+AudioClip:声音片段 可对其直接赋值声音文件
+Output：音源输出
+Mute：是否静音
+Bypass Effects:音源滤波开关 是否打开音频特效
+Bypass Listener Effe:监听滤波开关
+Bypass Reverb Zone:回音混淆开关 当勾选时 不执行回音混淆
+Play On Awake:开机自动播放
+Loop:循环播放
+Priority:播放优先级
+Volume:音量大小 范围0到1
+Pitch:播放速度 范围-3到3
+Stereo Pan:声道占比
+Spatial Blend:空间混合
+Reverb Zone Mix:回音混合
+3D Soungd Settings:3d声音设置 一般是不用
+
+
+
+
