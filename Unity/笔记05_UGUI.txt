@@ -1,0 +1,95 @@
+快捷键
+在Scene视图下 点击要编辑的图片
+按T可以自由拉伸	 中心的点为pivot 即自身坐标中心点  四角为拉伸点
+点击拉伸点的同时按住alt可以实现对称拉伸
+点击拉伸点的同时按住shift可以实现等比例拉伸
+同时按住Shift和Alt键可以实现固定中心点的等比对称拉伸
+
+Rect Transform
+是UI控件独有的组件 记录了UI控件在画布上的各种坐标信息
+Pos X、Y、Z：图片的pivot即矩形区域的中心点相对于锚点的坐标
+要注意的是 锚点是父物体矩形的锚点而不是Canvas的锚点
+Width、Height：矩形区域的长和宽 单位为像素
+Anchors
+min X、Y：固定在父物体矩形左下角的归一化位置
+max X、Y：
+Pivot：自身矩形区域的中心点在归一化后的数值
+pivot点一般在原点 矩形区域的旋转和比例都是围绕pivot点计算的
+
+
+Image
+Source Image：源图片 可以选择各种形式的图片放入 也可以选择精灵图Sprite
+Color：设置Image的颜色。
+Material：设置Image的材质 比如你想让图片具有金属的光泽，拖入金属材质就好。
+Raycast Target：是否作为射线检测的目标 有的UI是放置在游戏物体上而不是渲染到整个屏幕空间上的
+因此如果你希望该Image可以给射线检测到，就勾选此选项。
+Image Type：
+1.默认为Simple 后面两个属性都是Simple下的属性
+2.Sliced表示图片为切片类型
+3.Tiled表示图片为平铺类型	图片在被拉伸后	精灵图会以原始大小填充拉伸后的区域
+4.Filled表示为填充类型	一般制作血条之类的
+Use Sprite Mesh：是否使用精灵图网格
+Preserve Aspect：是否保持图片比例 勾选的话 在缩放图片时 图片的长宽比例是保持不变的
+Set Native Size：将图片恢复到原始大小
+
+
+Button
+Button上还挂载了一个Image组件	说明Button其实是一个Image	但是其上有Button组件
+因此具备了按钮的属性，可以被点击
+因此创建Button还有另外一种方式：创建一个Image	然后为其添加Button组件即可
+Interactable ：是否可以交互。取消勾选后Button就不能点击了，设置颜色也不会生效
+Transition ：Button的过渡效果。是一个单选框，参数依次为无、着色过渡、精灵图调换过渡、动画过渡
+arget Graphic：该组件的作用对象。UI控件实现效果的对象
+Normal Color：正常颜色	鼠标不在Button上时的颜色
+Highlighted Color：高亮颜色	鼠标在Button上时的颜色
+Pressed Color：按压颜色	鼠标点击Button时的颜色，松开后恢复
+Selected Color：被选颜色	鼠标点击Button时的颜色，松开后保持不变，除非点击Button外的界面
+Disabled Color：禁用颜色	禁用Button（Script）后的颜色
+Color Multiplier：颜色倍数
+Navigation ：控件间导航
+Visualize：是否可视。点击后在Scene中显示出每个UI控件之间的顺序
+On Click() ：给按钮添加响应事件
+Fade Duration：淡入淡出时间
+为Button添加点击事件
+
+
+Toggle
+常用于实现开关控制或者界面的切换
+Is On：游戏开始时开关是否开启	不勾选时	开关是关闭的
+要注意的是	Toggle使受控对象消失并不是通过SetActive	具体是怎么实现的我暂时还不太清楚	知道后会来补更新。
+Toggle Transition：开关的转换效果
+None为无	即直接打开或关闭	Fade为淡入淡出	有一个过渡过程。
+Graphic：受控制的对象	可以是任意GameObject
+Group：组	该开关所归属的组
+On Value Changed（Boolean）：类似于Button中的On Click	在这里添加事件	可以使得开关被点击的同时触发一些事件
+不同于Button的是	Toggle能触发的事件只有布尔值的改变
+
+
+Toggle Group快关组
+开关组的作用在于实现数个开关的集中管控
+开关组内的开关	同一时间只能有一个打开
+当勾选上Allow Switch Off时	同一时间运行所有开关都是关闭的	
+不勾选则至少保留一个开关是开启的（表现为，重复点击唯一 一个已经开启的开关，开关控制的对象不会消失）
+开关组经常用于实现比如同一窗口下多个界面的切换的效果	比如背包栏的分类	不同的属性界面
+
+Slider
+可以用来实现血条或技能CD
+Fill Rect & Handle Rect：
+Direction：滑动方向
+Min Value & Max Value：最小值和最大值 最小值最大值有助于数字化滑动的效果 比如血条的实现 就可以设置为最小值0 最大值100
+Whole Numbers：完整数字移动	勾选该项后 滑动器只会按照整数值的增加或减少 表现出来滑动时也是固定的面积或距离滑动
+不会出现诸如0.5、5.2这种浮点值 为什么设置这个呢 想想使用能量条的英雄 他们的体力值就是整数的减少和增加
+Value：数值
+On Value Changed（Single）：
+
+
+Scrollbar
+Handle Rect：滚动器的矩形坐标。指定滚动条。
+Direction：这个很有意思。要理解这里面的方向，都是指你向上滑动鼠标滚轮时，滚动条的移动方向。比如实现公告、网页等的滚动条向下移动的效果，你应该选择Bottom To Top，这样当你向上滑动鼠标滚轮时，滚动条是上移的；反过来就会向下移了。
+Value：值。可以根据方向判断，0的值永远在左边一个方向。比如你选择的是Bottom To Top，那么Value为0时滚动条处于Bottom。
+Size：滚动条的长度。调整没用，它会根据你指定的滚动内容自动改变。
+Number Of Steps：步数。具体不清楚，会回来更新的
+Content：内容。指定一个需要实现滚动效果的对象。
+Horizontal & Vertical：设置滚动方向，水平还是垂直。
+Movement Type：滚动的类型。Unrestricted，无限制，滚动无边界限制；Elastic，有弹性，滚动到边界时，如果继续滚动，会在边界不断地“拉扯”；Clamped，限制边界，滚动到边界时不能够再进行滚动。
+On Value Changed（Vector2）：
